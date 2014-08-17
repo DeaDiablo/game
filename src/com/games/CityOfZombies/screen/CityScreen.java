@@ -16,10 +16,6 @@ public class CityScreen extends GameScreen
   public CityScreen()
   {
     super();
-    Player player = new Player(ResourceManager.instance.getTextureRegion("player_pistol"), 500, 500, 0);
-    mainStage = new Stage(new ScalingViewport(Scaling.fit, 1920, 1080));
-    mainStage.addActor(player);
-    CityOfZombies.contoller.addStage(mainStage);
   }
 
   @Override
@@ -28,5 +24,10 @@ public class CityScreen extends GameScreen
     Gdx.input.setCatchBackKey(true);
     Gdx.input.setCatchMenuKey(true);
     setClearColor(1.0f, 1.0f, 1.0f, 1);
+
+    Player player = new Player(ResourceManager.instance.getTextureRegion("player_pistol"), 500, 500, 0);
+    mainStage = new Stage(new ScalingViewport(Scaling.fit, 1920, 1080));
+    mainStage.addActor(player);
+    CityOfZombies.contoller.addStage(mainStage);
   }
 }

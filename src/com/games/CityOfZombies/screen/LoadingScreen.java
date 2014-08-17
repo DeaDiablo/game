@@ -14,7 +14,7 @@ public class LoadingScreen extends GameScreen
   @Override
   public void show()
   {
-    ResourceManager.instance.loadFolder("data/sprites");
+    ResourceManager.instance.loadFolder("data");
   }
 
   @Override
@@ -25,7 +25,7 @@ public class LoadingScreen extends GameScreen
     if (ResourceManager.instance.update())
     {
       dispose();
-      GameInstance.game.setScreen(new CityScreen());
+      GameInstance.game.setScreen(new TestScreen());
     }
   }
 }
