@@ -25,7 +25,7 @@ public class LoadingScreen extends GameScreen
     if (ResourceManager.instance.update())
     {
       dispose();
-      GameInstance.game.setScreen(new TestScreen());
+      GameInstance.game.setScreen(new CityScreen(1920.0f, 1080.0f));
     }
   }
 }
