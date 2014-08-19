@@ -21,6 +21,7 @@ import com.shellGDX.GameLog;
 import com.shellGDX.controller.PhysicsWorld;
 import com.shellGDX.manager.ResourceManager;
 import com.shellGDX.screen.GameScreen;
+import com.shellGDX.utils.gleed.Level;
 
 public class CityScreen extends GameScreen implements InputProcessor
 {
@@ -53,9 +54,11 @@ public class CityScreen extends GameScreen implements InputProcessor
 
     //2d objects
     player = new Player(ResourceManager.instance.getTextureRegion("player_pistol.png"), 0, 0);
+    Level level = ResourceManager.instance.getGleed2dMap("testLevel0.xml");
 
     mainStage = new Stage(new ScalingViewport(Scaling.fit, width, height));
     camera2D = mainStage.getCamera();
+    mainStage.addActor(level);
     mainStage.addActor(player);
     GameInstance.contoller.addStage(mainStage);
 
