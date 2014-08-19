@@ -52,7 +52,7 @@ public class CityScreen extends GameScreen implements InputProcessor
     setClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 
     //2d objects
-    player = new Player(ResourceManager.instance.getTextureRegion("player_pistol.png"), width * 0.5f, height * 0.5f);
+    player = new Player(ResourceManager.instance.getTextureRegion("player_pistol.png"), 0, 0);
 
     mainStage = new Stage(new ScalingViewport(Scaling.fit, width, height));
     camera2D = mainStage.getCamera();
@@ -68,9 +68,9 @@ public class CityScreen extends GameScreen implements InputProcessor
     camera3D.near = 1.0f;
     camera3D.far  = 50.0f;
 
-    Model ship = ResourceManager.instance.getModel("data/models/testmodel.obj");
-    ModelInstance shipInstance = new ModelInstance(ship);
-    models.add(shipInstance);
+    Model block = ResourceManager.instance.getModel("data/models/testmodel.obj");
+    ModelInstance blockModel = new ModelInstance(block);
+    models.add(blockModel);
 
     GameInstance.contoller.addProcessor(this);
   }
@@ -91,21 +91,23 @@ public class CityScreen extends GameScreen implements InputProcessor
     }
 
     speed.set(moveVec);
-    speed.scl(PhysicsWorld.WORLD_TO_BOX * 20);
+    speed.scl(PhysicsWorld.WORLD_TO_BOX * 100);
     player.getBody().setLinearVelocity(speed);
-    mainStage.getCamera().position.x = player.getX();
-    mainStage.getCamera().position.y = player.getY();
+    
+    camera2D.position.x = player.getOriginX() + player.getX();
+    camera2D.position.y = player.getOriginY() + player.getY();
+    camera2D.update();
 
-    camera3D.position.x = player.getX() - width * 0.5f;
-    //camera3D.position.y = player.getY() - height * 0.5f;
+    camera3D.position.x = camera2D.position.x;
+    camera3D.position.y = camera2D.position.y;
     camera3D.update();
   }
   
   @Override
   public void render(float deltaTime)
-  {    
+  {
     super.render(deltaTime);
-     
+
     Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
     Gdx.gl.glClear(GL30.GL_DEPTH_BUFFER_BIT);
 
@@ -229,9 +231,8 @@ public class CityScreen extends GameScreen implements InputProcessor
   public boolean mouseMoved(int screenX, int screenY)
   {
     mousePoint.set(screenX, Gdx.graphics.getHeight() -  screenY);
-    mainStage.screenToStageCoordinates(mousePoint);
-    mousePoint.sub(width * 0.5f, height * 0.5f);
-    player.setRotation(-MathUtils.atan2(mousePoint.y, mousePoint.x) * MathUtils.radiansToDegrees - 90.0f);
+    mousePoint.sub(Gdx.graphics.getWidth() * 0.5f, Gdx.graphics.getHeight() * 0.5f);
+    player.setRotation(MathUtils.atan2(mousePoint.y, mousePoint.x) * MathUtils.radiansToDegrees - 90.0f);
     return true;
   }
 

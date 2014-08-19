@@ -17,7 +17,6 @@ public class Player extends PhysicsModel
     setPosition(x - getWidth() / 2, y - getHeight() / 2);
     setOrigin(getWidth() / 2, getHeight() / 2);
     fixedRotation = true;
-    layout();
   }
 
   @Override
@@ -35,7 +34,7 @@ public class Player extends PhysicsModel
     body = world.createBody(bodyDef);
 
     CircleShape circle = new CircleShape();
-    circle.setRadius(getImageWidth() * 0.5f * WORLD_TO_BOX);
+    circle.setRadius(getWidth() * 0.5f * WORLD_TO_BOX);
 
     FixtureDef fixtureDef = new FixtureDef();
     fixtureDef.shape = circle;
