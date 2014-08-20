@@ -7,15 +7,14 @@ import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
-import com.shellGDX.model.PhysicsModel;
+import com.shellGDX.model.PhysicsModel2D;
 
-public class Player extends PhysicsModel
+public class Player extends PhysicsModel2D
 {
   public Player(TextureRegion region, float x, float y)
   {
     super(region);
-    setPosition(x - getWidth() / 2, y - getHeight() / 2);
-    setOrigin(getWidth() / 2, getHeight() / 2);
+    setPosition(x, y);
     fixedRotation = true;
   }
 

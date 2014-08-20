@@ -4,37 +4,34 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
-import com.badlogic.gdx.graphics.g3d.Model;
-import com.badlogic.gdx.graphics.g3d.ModelBatch;
-import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.Scaling;
-import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.games.CityOfZombies.model.Player;
 import com.shellGDX.GameInstance;
 import com.shellGDX.GameLog;
 import com.shellGDX.controller.PhysicsWorld;
 import com.shellGDX.manager.ResourceManager;
+import com.shellGDX.model.Model3D;
+import com.shellGDX.model.Scene2D;
+import com.shellGDX.model.Scene3D;
 import com.shellGDX.screen.GameScreen;
 import com.shellGDX.utils.gleed.Level;
 
 public class CityScreen extends GameScreen implements InputProcessor
 {
+  //parametrs
+  protected float width = 0.0f,
+                  height = 0.0f;
+  
   //2d objects
-  protected Stage mainStage = null;
-  protected Camera camera2D = null;
-  protected float width = 0.0f, height = 0.0f;
-  protected Player player = null; 
+  protected Scene2D   scene2D   = null;
+  protected Camera    camera2D  = null;
+  protected Player    player    = null; 
 
   //3d objects
-  public PerspectiveCamera    camera3D = null;
-  public ModelBatch           batch3D  = null;
-  public Array<ModelInstance> models   = new Array<ModelInstance>();
+  protected Scene3D   scene3D   = null;
+  protected Camera    camera3D  = null;
   
   public CityScreen(float width, float height)
   {
@@ -56,24 +53,25 @@ public class CityScreen extends GameScreen implements InputProcessor
     player = new Player(ResourceManager.instance.getTextureRegion("player_pistol.png"), 0, 0);
     Level level = ResourceManager.instance.getGleed2dMap("testLevel0.xml");
 
-    mainStage = new Stage(new ScalingViewport(Scaling.fit, width, height));
-    camera2D = mainStage.getCamera();
-    mainStage.addActor(level);
-    mainStage.addActor(player);
-    GameInstance.contoller.addStage(mainStage);
+    scene2D = new Scene2D(width, height);
+    camera2D = scene2D.getCamera();
+    scene2D.addActor(level);
+    scene2D.addActor(player);
+    GameInstance.contoller.addScene2D(scene2D);
 
     //3d objects
-    batch3D = new ModelBatch();
-
-    camera3D = new PerspectiveCamera(90.0f * height / width, width, height);
-    camera3D.position.set(0, 0, 50);
-    camera3D.lookAt(0,0,0);
+    camera3D = new PerspectiveCamera(67, width, height);
+    camera3D.position.set(0, 0, 816);
+    camera3D.lookAt(0, 0, 0);
     camera3D.near = 1.0f;
-    camera3D.far  = 50.0f;
+    camera3D.far  = camera3D.position.z;
 
-    Model block = ResourceManager.instance.getModel("data/models/testmodel.obj");
-    ModelInstance blockModel = new ModelInstance(block);
-    models.add(blockModel);
+    scene3D = new Scene3D((PerspectiveCamera)camera3D);
+    
+    Model3D model = new Model3D("data/models/testmodel.obj");
+    model.transform.scale(50.0f, 50.0f, 50.0f);
+    scene3D.addModel3D(model);
+    GameInstance.contoller.addScene3D(scene3D);
 
     GameInstance.contoller.addProcessor(this);
   }
@@ -94,7 +92,7 @@ public class CityScreen extends GameScreen implements InputProcessor
     }
 
     speed.set(moveVec);
-    speed.scl(PhysicsWorld.WORLD_TO_BOX * 100);
+    speed.scl(PhysicsWorld.WORLD_TO_BOX * 300);
     player.getBody().setLinearVelocity(speed);
     
     camera2D.position.x = player.getOriginX() + player.getX();
@@ -110,21 +108,8 @@ public class CityScreen extends GameScreen implements InputProcessor
   public void render(float deltaTime)
   {
     super.render(deltaTime);
-
-    Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-    Gdx.gl.glClear(GL30.GL_DEPTH_BUFFER_BIT);
-
-    batch3D.begin(camera3D);
-    batch3D.render(models);
-    batch3D.end();
   }
-   
-  @Override
-  public void dispose()
-  {
-    batch3D.dispose();
-    models.clear();
-  }
+
 
   public void resume()
   {
