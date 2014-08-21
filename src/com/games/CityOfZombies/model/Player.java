@@ -10,7 +10,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.shellGDX.box2dLight.PointLight;
 import com.shellGDX.box2dLight.RayHandler;
-import com.shellGDX.model.PhysicsModel2D;
+import com.shellGDX.model2D.PhysicsModel2D;
 
 public class Player extends PhysicsModel2D
 {

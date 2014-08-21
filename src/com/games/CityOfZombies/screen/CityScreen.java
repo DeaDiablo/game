@@ -3,7 +3,7 @@ package com.games.CityOfZombies.screen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
@@ -13,9 +13,9 @@ import com.shellGDX.GameLog;
 import com.shellGDX.controller.LightWorld;
 import com.shellGDX.controller.PhysicsWorld;
 import com.shellGDX.manager.ResourceManager;
-import com.shellGDX.model.Model3D;
-import com.shellGDX.model.Scene2D;
-import com.shellGDX.model.Scene3D;
+import com.shellGDX.model2D.Scene2D;
+import com.shellGDX.model3D.Model3D;
+import com.shellGDX.model3D.Scene3D;
 import com.shellGDX.screen.GameScreen;
 import com.shellGDX.utils.gleed.Level;
 
@@ -26,13 +26,13 @@ public class CityScreen extends GameScreen implements InputProcessor
                   height = 0.0f;
   
   //2d objects
-  protected Scene2D   scene2D   = null;
-  protected Camera    camera2D  = null;
-  protected Player    player    = null; 
+  protected Scene2D            scene2D   = null;
+  protected OrthographicCamera camera2D  = null;
+  protected Player             player    = null; 
 
   //3d objects
-  protected Scene3D   scene3D   = null;
-  protected Camera    camera3D  = null;
+  protected Scene3D            scene3D   = null;
+  protected PerspectiveCamera  camera3D  = null;
   
   public CityScreen(float width, float height)
   {
@@ -56,22 +56,25 @@ public class CityScreen extends GameScreen implements InputProcessor
     Level level = ResourceManager.instance.getGleed2dMap("testLevel0.xml");
 
     scene2D = new Scene2D(width, height);
-    camera2D = scene2D.getCamera();
+    camera2D = (OrthographicCamera) scene2D.getCamera();
     scene2D.addActor(level);
     scene2D.addActor(player);
     GameInstance.contoller.addScene2D(scene2D);
 
     //3d objects
-    camera3D = new PerspectiveCamera(67, width, height);
+    camera3D = new PerspectiveCamera(67f, 1920, 1080);
     camera3D.position.set(0, 0, 816);
     camera3D.lookAt(0, 0, 0);
     camera3D.near = 1.0f;
     camera3D.far  = camera3D.position.z;
-
-    scene3D = new Scene3D((PerspectiveCamera)camera3D);
     
-    Model3D model = new Model3D("data/models/testmodel.obj");
-    model.transform.scale(50.0f, 50.0f, 50.0f);
+    scene3D = new Scene3D(width, height, camera3D);
+
+    Model3D model = new Model3D(ResourceManager.instance.getModel("testmodel.obj"));
+    model.setScale(20, 20, 20);
+    scene3D.addModel3D(model);
+    model = new Model3D(ResourceManager.instance.getModel("testmodel.obj"), 500, 500, 0);
+    model.setScale(20, 20, 20);
     scene3D.addModel3D(model);
     GameInstance.contoller.addScene3D(scene3D);
 
