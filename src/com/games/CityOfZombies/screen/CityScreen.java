@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.games.CityOfZombies.model.Player;
 import com.shellGDX.GameInstance;
 import com.shellGDX.GameLog;
+import com.shellGDX.controller.LightWorld;
 import com.shellGDX.controller.PhysicsWorld;
 import com.shellGDX.manager.ResourceManager;
 import com.shellGDX.model.Model3D;
@@ -44,7 +45,8 @@ public class CityScreen extends GameScreen implements InputProcessor
   public void show()
   {
     //settings
-    PhysicsWorld.init(new Vector2(0, 0), false);
+    PhysicsWorld.init(new Vector2(0, 0), true);
+    LightWorld.init();
     Gdx.input.setCatchBackKey(true);
     Gdx.input.setCatchMenuKey(true);
     setClearColor(1.0f, 1.0f, 1.0f, 1.0f);
@@ -82,7 +84,7 @@ public class CityScreen extends GameScreen implements InputProcessor
   @Override
   public void update(float deltaTime)
   {
-    super.update(deltaTime);
+	super.update(deltaTime);
     
     fpsTime -= deltaTime;
     if (fpsTime <= 0.0f)
@@ -108,6 +110,7 @@ public class CityScreen extends GameScreen implements InputProcessor
   public void render(float deltaTime)
   {
     super.render(deltaTime);
+    LightWorld.instance.render();
   }
 
 
