@@ -87,7 +87,7 @@ public class CityScreen extends GameScreen implements InputProcessor
   @Override
   public void update(float deltaTime)
   {
-	super.update(deltaTime);
+    super.update(deltaTime);
     
     fpsTime -= deltaTime;
     if (fpsTime <= 0.0f)
@@ -118,10 +118,6 @@ public class CityScreen extends GameScreen implements InputProcessor
 
 
   public void resume()
-  {
-  }
-
-  public void resize(int width, int height)
   {
   }
 
