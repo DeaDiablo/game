@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.games.CityOfZombies.model.Car;
 import com.games.CityOfZombies.model.Player;
 import com.shellGDX.GameInstance;
 import com.shellGDX.GameLog;
@@ -28,7 +29,8 @@ public class CityScreen extends GameScreen implements InputProcessor
   //2d objects
   protected Scene2D            scene2D   = null;
   protected OrthographicCamera camera2D  = null;
-  protected Player             player    = null; 
+  protected Player             player    = null;
+  protected Car                car       = null;
 
   //3d objects
   protected Scene3D            scene3D   = null;
@@ -55,10 +57,12 @@ public class CityScreen extends GameScreen implements InputProcessor
     camera2D = (OrthographicCamera)scene2D.getCamera();
     LightWorld.init(camera2D);
     
+    car = new Car(ResourceManager.instance.getTextureRegion("red_car.png"), -300, 300);
     player = new Player(ResourceManager.instance.getTextureRegion("player_pistol.png"), 0, 0);
     Level level = ResourceManager.instance.getGleed2dMap("testLevel0.xml");
     scene2D.addActor(level);
     scene2D.addActor(player);
+    scene2D.addActor(car);
     GameInstance.contoller.addScene2D(scene2D);
 
     //3d objects
