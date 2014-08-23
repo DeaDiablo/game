@@ -46,17 +46,17 @@ public class CityScreen extends GameScreen implements InputProcessor
   {
     //settings
     PhysicsWorld.init(new Vector2(0, 0), true);
-    LightWorld.init();
     Gdx.input.setCatchBackKey(true);
     Gdx.input.setCatchMenuKey(true);
     setClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 
     //2d objects
+    scene2D = new Scene2D(width, height);
+    camera2D = (OrthographicCamera)scene2D.getCamera();
+    LightWorld.init(camera2D);
+    
     player = new Player(ResourceManager.instance.getTextureRegion("player_pistol.png"), 0, 0);
     Level level = ResourceManager.instance.getGleed2dMap("testLevel0.xml");
-
-    scene2D = new Scene2D(width, height);
-    camera2D = (OrthographicCamera) scene2D.getCamera();
     scene2D.addActor(level);
     scene2D.addActor(player);
     GameInstance.contoller.addScene2D(scene2D);
