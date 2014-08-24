@@ -11,6 +11,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.shellGDX.controller.PhysicsWorld;
 import com.shellGDX.model3D.Model3D;
+import com.shellGDX.model3D.Scene3D;
 
 public class Wall extends Model3D
 {
@@ -53,6 +54,25 @@ public class Wall extends Model3D
 
     box.dispose();
     return true;
+  }
+  
+  @Override
+  protected void setScene(Scene3D scene)
+  {
+    super.setScene(scene);
+    if (PhysicsWorld.instance != null)
+      initPhysicsObject(PhysicsWorld.instance);
+  }
+  
+  @Override
+  public boolean remove()
+  {
+    if (body != null && PhysicsWorld.instance != null)
+    {
+      PhysicsWorld.instance.destroyBody(body);
+      body = null;
+    }
+    return super.remove();
   }
 
 }

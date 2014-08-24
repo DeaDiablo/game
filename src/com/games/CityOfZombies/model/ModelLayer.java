@@ -3,7 +3,6 @@ package com.games.CityOfZombies.model;
 import java.util.HashMap;
 
 import com.badlogic.gdx.utils.Array;
-import com.shellGDX.controller.PhysicsWorld;
 import com.shellGDX.manager.ResourceManager;
 import com.shellGDX.model3D.Group3D;
 import com.shellGDX.model3D.Model3D;
@@ -49,7 +48,6 @@ public class ModelLayer extends Group3D
           Wall model = new Wall(ResourceManager.instance.getModel("window.obj"));
           model.setPosition(texture.getX(), texture.getY(), 0);
           model.setRotation(0, 0, texture.getRotation() - 90);
-          model.initPhysicsObject(PhysicsWorld.instance);
           addModel(model);
           arrayTextures.removeValue(texture, true);
         }
@@ -72,12 +70,13 @@ public class ModelLayer extends Group3D
       models.put(key, arrayModel);
     }
     arrayModel.add(model);
+    addModel3D(model);
   }
   
   @Override
   public boolean update(float delta)
   {
-    clearChildren();
+    getChildren().clear();
     if (!isVisible())
       return false;
     
@@ -91,7 +90,7 @@ public class ModelLayer extends Group3D
         Array<Model3D> models = getModels(blockX + i, blockY + j);
         if (models != null && models.size > 0)
           for(Model3D model : models)
-            addModel3D(model);
+            getChildren().add(model);
       }
     }
     
