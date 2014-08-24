@@ -1,7 +1,5 @@
 package com.games.CityOfZombies.screen;
 
-import java.util.Timer;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
@@ -23,7 +21,7 @@ import com.shellGDX.manager.ResourceManager;
 import com.shellGDX.model2D.Scene2D;
 import com.shellGDX.model3D.Scene3D;
 import com.shellGDX.screen.GameScreen;
-import com.shellGDX.utils.DayNightCycleTask;
+import com.shellGDX.utils.DayNightCycle;
 import com.shellGDX.utils.gleed.Layer;
 import com.shellGDX.utils.gleed.Level;
 
@@ -43,7 +41,8 @@ public class CityScreen extends GameScreen implements InputProcessor
   protected Scene3D            scene3D   = null;
   protected PerspectiveCamera  camera3D  = null;
   
-  protected Timer              time      = null;
+  protected boolean            clearWeather = true;
+  protected DayNightCycle      dayNight  = new DayNightCycle(17, 0.5f / 24.0f, clearWeather);
   
   public CityScreen(float width, float height)
   {
@@ -96,30 +95,19 @@ public class CityScreen extends GameScreen implements InputProcessor
     }
     scene3D.addModel3D(modelLevel);
     GameInstance.contoller.addScene3D(scene3D);
-    
-    time = new Timer();
-    DayNightCycleTask dnst = new DayNightCycleTask();
-    
-    time.schedule(dnst, 0, 1000);
-
 
     GameInstance.contoller.addProcessor(this);
   }
-  
-  protected float fpsTime = 1.0f;
+
   protected Vector2 speed = new Vector2();
   
   @Override
   public void update(float deltaTime)
   {
-    super.update(deltaTime);
+    GameLog.instance.writeFPS();
     
-    fpsTime -= deltaTime;
-    if (fpsTime <= 0.0f)
-    {
-      GameLog.instance.writeFPS();
-      fpsTime = 1.0f;
-    }
+    dayNight.update(deltaTime, clearWeather);
+    super.update(deltaTime);
 
     speed.set(moveVec);
     speed.scl(PhysicsWorld.WORLD_TO_BOX * 300);
