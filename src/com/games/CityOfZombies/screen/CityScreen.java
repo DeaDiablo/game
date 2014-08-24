@@ -1,8 +1,11 @@
 package com.games.CityOfZombies.screen;
 
+import java.util.Timer;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.math.MathUtils;
@@ -13,12 +16,14 @@ import com.games.CityOfZombies.model.ModelLevel;
 import com.games.CityOfZombies.model.Player;
 import com.shellGDX.GameInstance;
 import com.shellGDX.GameLog;
+import com.shellGDX.box2dLight.PointLight;
 import com.shellGDX.controller.LightWorld;
 import com.shellGDX.controller.PhysicsWorld;
 import com.shellGDX.manager.ResourceManager;
 import com.shellGDX.model2D.Scene2D;
 import com.shellGDX.model3D.Scene3D;
 import com.shellGDX.screen.GameScreen;
+import com.shellGDX.utils.DayNightCycleTask;
 import com.shellGDX.utils.gleed.Layer;
 import com.shellGDX.utils.gleed.Level;
 
@@ -37,6 +42,8 @@ public class CityScreen extends GameScreen implements InputProcessor
   //3d objects
   protected Scene3D            scene3D   = null;
   protected PerspectiveCamera  camera3D  = null;
+  
+  protected Timer              time      = null;
   
   public CityScreen(float width, float height)
   {
@@ -59,13 +66,17 @@ public class CityScreen extends GameScreen implements InputProcessor
     camera2D = (OrthographicCamera)scene2D.getCamera();
     LightWorld.init(camera2D);
     
-    car = new Car(ResourceManager.instance.getTextureRegion("red_car.png"), -300, 300);
+    car = new Car(ResourceManager.instance.getTextureRegion("taxi.png"), -300, 300);
     player = new Player(ResourceManager.instance.getTextureRegion("player_pistol.png"), 0, 0);
     Level level = ResourceManager.instance.getGleed2DMap("testLevel1.xml");
     scene2D.addActor(level);
     scene2D.addActor(player);
     scene2D.addActor(car);
     GameInstance.contoller.addScene2D(scene2D);
+    
+    PointLight playerGlow = new PointLight(LightWorld.instance, 128, new Color(0.05f, 0.05f, 0.05f, 0.05f), 1024, 0, 0);
+    playerGlow.setXray(true);
+    playerGlow.attachToBody(player.getBody(), 0, 0);
 
     //3d objects
     camera3D = new PerspectiveCamera(67f, 1920, 1080);
@@ -85,6 +96,12 @@ public class CityScreen extends GameScreen implements InputProcessor
     }
     scene3D.addModel3D(modelLevel);
     GameInstance.contoller.addScene3D(scene3D);
+    
+    time = new Timer();
+    DayNightCycleTask dnst = new DayNightCycleTask();
+    
+    time.schedule(dnst, 0, 1000);
+
 
     GameInstance.contoller.addProcessor(this);
   }
