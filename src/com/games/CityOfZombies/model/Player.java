@@ -33,7 +33,7 @@ public class Player extends PhysicsModel2D
     body = world.createBody(bodyDef);
 
     CircleShape circle = new CircleShape();
-    circle.setRadius(getWidth() * 0.5f * WORLD_TO_BOX);
+    circle.setRadius(getWidth() * 0.25f * WORLD_TO_BOX);
 
     FixtureDef fixtureDef = new FixtureDef();
     fixtureDef.shape = circle;

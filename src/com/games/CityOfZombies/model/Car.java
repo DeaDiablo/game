@@ -9,7 +9,6 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.shellGDX.box2dLight.ConeLight;
-import com.shellGDX.box2dLight.PointLight;
 import com.shellGDX.box2dLight.RayHandler;
 import com.shellGDX.model2D.LightModel2D;
 

@@ -15,7 +15,7 @@ public class LoadingScreen extends GameScreen
   public void show()
   {
     ResourceManager.instance.loadFolder("data");
-    ResourceManager.instance.loadGleed2dMap("data/testLevel0.xml");
+    ResourceManager.instance.loadGleed2DMap("data/testLevel1.xml");
   }
 
   @Override

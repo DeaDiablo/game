@@ -8,6 +8,8 @@ import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.games.CityOfZombies.model.Car;
+import com.games.CityOfZombies.model.ModelLayer;
+import com.games.CityOfZombies.model.ModelLevel;
 import com.games.CityOfZombies.model.Player;
 import com.shellGDX.GameInstance;
 import com.shellGDX.GameLog;
@@ -15,9 +17,9 @@ import com.shellGDX.controller.LightWorld;
 import com.shellGDX.controller.PhysicsWorld;
 import com.shellGDX.manager.ResourceManager;
 import com.shellGDX.model2D.Scene2D;
-import com.shellGDX.model3D.Model3D;
 import com.shellGDX.model3D.Scene3D;
 import com.shellGDX.screen.GameScreen;
+import com.shellGDX.utils.gleed.Layer;
 import com.shellGDX.utils.gleed.Level;
 
 public class CityScreen extends GameScreen implements InputProcessor
@@ -59,7 +61,7 @@ public class CityScreen extends GameScreen implements InputProcessor
     
     car = new Car(ResourceManager.instance.getTextureRegion("red_car.png"), -300, 300);
     player = new Player(ResourceManager.instance.getTextureRegion("player_pistol.png"), 0, 0);
-    Level level = ResourceManager.instance.getGleed2dMap("testLevel0.xml");
+    Level level = ResourceManager.instance.getGleed2DMap("testLevel1.xml");
     scene2D.addActor(level);
     scene2D.addActor(player);
     scene2D.addActor(car);
@@ -74,12 +76,14 @@ public class CityScreen extends GameScreen implements InputProcessor
     
     scene3D = new Scene3D(width, height, camera3D);
 
-    Model3D model = new Model3D(ResourceManager.instance.getModel("testmodel.obj"));
-    model.setScale(20, 20, 20);
-    scene3D.addModel3D(model);
-    model = new Model3D(ResourceManager.instance.getModel("testmodel.obj"), 500, 500, 0);
-    model.setScale(20, 20, 20);
-    scene3D.addModel3D(model);
+    ModelLevel modelLevel = new ModelLevel();
+    for(Layer layer : level.getLayers())
+    {
+      ModelLayer modelLayer = new ModelLayer();
+      modelLayer.parseLayer(layer);
+      modelLevel.addModel3D(modelLayer);
+    }
+    scene3D.addModel3D(modelLevel);
     GameInstance.contoller.addScene3D(scene3D);
 
     GameInstance.contoller.addProcessor(this);
