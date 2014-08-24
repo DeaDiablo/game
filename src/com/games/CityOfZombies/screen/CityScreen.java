@@ -116,14 +116,6 @@ public class CityScreen extends GameScreen implements InputProcessor
     camera3D.position.y = camera2D.position.y;
     camera3D.update();
   }
-  
-  @Override
-  public void render(float deltaTime)
-  {
-    super.render(deltaTime);
-    LightWorld.instance.render();
-  }
-
 
   public void resume()
   {
