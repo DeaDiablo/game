@@ -52,17 +52,18 @@ public class Car extends LightModel2D
   @Override
   public boolean initLightObject(RayHandler rayHandler)
   {
-    ConeLight left_headlight = new ConeLight(rayHandler, 512, new Color(0.5f, 0.5f, 0.5f, 0.5f), 1500 * WORLD_TO_BOX, 0, 0, getRotation(), 30);
-    left_headlight.attachToBody(body, 300 * WORLD_TO_BOX, -80 * WORLD_TO_BOX);
+    ConeLight left_headlight = new ConeLight(rayHandler, 256, new Color(0.5f, 0.5f, 0.5f, 0.5f), 1500, 0, 0, getRotation(), 30);
+    left_headlight.attachToBody(body, 300, -80);
     left_headlight.setActive(true);
     left_headlight.setStaticLight(false);
     lights.put("left_headlight", left_headlight.hashCode());
     
-    ConeLight right_headlight = new ConeLight(rayHandler, 512, new Color(0.5f, 0.5f, 0.5f, 0.5f), 1500 * WORLD_TO_BOX, 0, 0, getRotation(), 30);
-    right_headlight.attachToBody(body, 300 * WORLD_TO_BOX, 80 * WORLD_TO_BOX);
+    ConeLight right_headlight = new ConeLight(rayHandler, 256, new Color(0.5f, 0.5f, 0.5f, 0.5f), 1500, 0, 0, getRotation(), 30);
+    right_headlight.attachToBody(body, 300, 80);
     right_headlight.setActive(true);
     right_headlight.setStaticLight(false);
     lights.put("right_headlight", right_headlight.hashCode());
+  
     return true;
   }
 }
