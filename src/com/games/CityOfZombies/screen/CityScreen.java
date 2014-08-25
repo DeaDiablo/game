@@ -3,9 +3,10 @@ package com.games.CityOfZombies.screen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
+import com.badlogic.gdx.graphics.g3d.Environment;
+import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.games.CityOfZombies.model.Car;
@@ -14,7 +15,6 @@ import com.games.CityOfZombies.model.ModelLevel;
 import com.games.CityOfZombies.model.Player;
 import com.shellGDX.GameInstance;
 import com.shellGDX.GameLog;
-import com.shellGDX.box2dLight.PointLight;
 import com.shellGDX.controller.LightWorld;
 import com.shellGDX.controller.PhysicsWorld;
 import com.shellGDX.manager.ResourceManager;
@@ -28,7 +28,7 @@ import com.shellGDX.utils.gleed.Level;
 public class CityScreen extends GameScreen implements InputProcessor
 {
   //parametrs
-  protected float width = 0.0f,
+  protected float width  = 0.0f,
                   height = 0.0f;
   
   //2d objects
@@ -41,8 +41,9 @@ public class CityScreen extends GameScreen implements InputProcessor
   protected Scene3D            scene3D   = null;
   protected PerspectiveCamera  camera3D  = null;
   
+  protected ColorAttribute     sunLight3D   = null;
   protected boolean            clearWeather = true;
-  protected DayNightCycle      dayNight  = new DayNightCycle(17, 0.5f / 24.0f, clearWeather);
+  protected DayNightCycle      dayNight     = new DayNightCycle(17, 0.5f / 24.0f, clearWeather);
   
   public CityScreen(float width, float height)
   {
@@ -64,7 +65,7 @@ public class CityScreen extends GameScreen implements InputProcessor
     scene2D = new Scene2D(width, height);
     camera2D = (OrthographicCamera)scene2D.getCamera();
     LightWorld.init(camera2D);
-    
+
     car = new Car(ResourceManager.instance.getTextureRegion("taxi.png"), -300, 300);
     player = new Player(ResourceManager.instance.getTextureRegion("player_pistol.png"), 0, 0);
     Level level = ResourceManager.instance.getGleed2DMap("testLevel1.xml");
@@ -72,10 +73,6 @@ public class CityScreen extends GameScreen implements InputProcessor
     scene2D.addActor(player);
     scene2D.addActor(car);
     GameInstance.contoller.addScene2D(scene2D);
-    
-    PointLight playerGlow = new PointLight(LightWorld.instance, 128, new Color(0.05f, 0.05f, 0.05f, 0.05f), 1024, 0, 0);
-    playerGlow.setXray(true);
-    playerGlow.attachToBody(player.getBody(), 0, 0);
 
     //3d objects
     camera3D = new PerspectiveCamera(67f, 1920, 1080);
@@ -83,8 +80,12 @@ public class CityScreen extends GameScreen implements InputProcessor
     camera3D.lookAt(0, 0, 0);
     camera3D.near = 1.0f;
     camera3D.far  = camera3D.position.z;
-    
-    scene3D = new Scene3D(width, height, camera3D);
+
+    Environment environment = new Environment();
+    sunLight3D = new ColorAttribute(ColorAttribute.AmbientLight, dayNight.getDayColor());
+    environment.set(sunLight3D);
+
+    scene3D = new Scene3D(width, height, camera3D, environment);
 
     ModelLevel modelLevel = new ModelLevel();
     for(Layer layer : level.getLayers())
@@ -93,6 +94,7 @@ public class CityScreen extends GameScreen implements InputProcessor
       modelLayer.parseLayer(layer);
       modelLevel.addModel3D(modelLayer);
     }
+    
     scene3D.addModel3D(modelLevel);
     GameInstance.contoller.addScene3D(scene3D);
 
@@ -104,11 +106,6 @@ public class CityScreen extends GameScreen implements InputProcessor
   @Override
   public void update(float deltaTime)
   {
-    GameLog.instance.writeFPS();
-    
-    dayNight.update(deltaTime, clearWeather);
-    super.update(deltaTime);
-
     speed.set(moveVec);
     speed.scl(PhysicsWorld.WORLD_TO_BOX * 300);
     player.getBody().setLinearVelocity(speed);
@@ -120,6 +117,11 @@ public class CityScreen extends GameScreen implements InputProcessor
     camera3D.position.x = camera2D.position.x;
     camera3D.position.y = camera2D.position.y;
     camera3D.update();
+
+    dayNight.update(deltaTime, clearWeather);
+    sunLight3D.color.set(dayNight.getDayColor());
+    super.update(deltaTime);
+    GameLog.instance.writeFPS();
   }
 
   public void resume()
@@ -131,7 +133,6 @@ public class CityScreen extends GameScreen implements InputProcessor
   }
   
   //control
-  
   protected Vector2 moveVec    = new Vector2(0, 0);
   protected Vector2 mousePoint = new Vector2(0, 0);
 
