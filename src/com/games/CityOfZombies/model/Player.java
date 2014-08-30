@@ -1,5 +1,6 @@
 package com.games.CityOfZombies.model;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -7,9 +8,11 @@ import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
-import com.shellGDX.model2D.PhysicsModel2D;
+import com.games.CityOfZombies.light.PointLight2D3D;
+import com.shellGDX.box2dLight.RayHandler;
+import com.shellGDX.model2D.LightModel2D;
 
-public class Player extends PhysicsModel2D
+public class Player extends LightModel2D
 {
   public Player(TextureRegion region, float x, float y)
   {
@@ -43,6 +46,17 @@ public class Player extends PhysicsModel2D
     fixture.setUserData(this);
 
     circle.dispose();
+    return true;
+  }
+
+  @Override
+  public boolean initLightObject(RayHandler rayHandler)
+  {
+    PointLight2D3D point = new PointLight2D3D(rayHandler, 256, new Color(0.85f, 0.75f, 0.65f, 1.0f), 500f, 0, 0);
+    point.attachToBody(body, 0, 0);
+    point.setActive(true);
+    point.setStaticLight(false);
+
     return true;
   }
 }

@@ -8,7 +8,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
-import com.shellGDX.box2dLight.ConeLight;
+import com.games.CityOfZombies.light.ConusLight2D3D;
 import com.shellGDX.box2dLight.RayHandler;
 import com.shellGDX.model2D.LightModel2D;
 
@@ -52,13 +52,13 @@ public class Car extends LightModel2D
   @Override
   public boolean initLightObject(RayHandler rayHandler)
   {
-    ConeLight left_headlight = new ConeLight(rayHandler, 128, new Color(0.4f, 0.4f, 0.3f, 1.0f), 1500, 0, 0, getRotation(), 30);
+    ConusLight2D3D left_headlight = new ConusLight2D3D(rayHandler, 128, new Color(0.4f, 0.4f, 0.3f, 1.0f), 1500, 0, 0, getRotation(), 30);
     left_headlight.attachToBody(body, 300, -80);
     left_headlight.setActive(true);
     left_headlight.setStaticLight(false);
     lights.put("left_headlight", left_headlight.hashCode());
     
-    ConeLight right_headlight = new ConeLight(rayHandler, 128, new Color(0.4f, 0.4f, 0.3f, 1.0f), 1500, 0, 0, getRotation(), 30);
+    ConusLight2D3D right_headlight = new ConusLight2D3D(rayHandler, 128, new Color(0.4f, 0.4f, 0.3f, 1.0f), 1500, 0, 0, getRotation(), 30);
     right_headlight.attachToBody(body, 300, 80);
     right_headlight.setActive(true);
     right_headlight.setStaticLight(false);
