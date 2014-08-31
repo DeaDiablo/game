@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.games.CityOfZombies.light.ShadowFilter;
 
 public class Wall extends ModelPlate
 {
@@ -25,6 +26,7 @@ public class Wall extends ModelPlate
     fixtureDef.density = 1.0f;
     fixtureDef.friction = 0.0f;
     fixture = body.createFixture(fixtureDef);
+    fixture.setFilterData(new ShadowFilter());
 
     box.dispose();
     return true;

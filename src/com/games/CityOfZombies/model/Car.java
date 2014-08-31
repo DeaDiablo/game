@@ -43,7 +43,6 @@ public class Car extends LightModel2D
     fixtureDef.density = 1.0f;
     fixtureDef.friction = 1.0f;
     fixture = body.createFixture(fixtureDef);
-    fixture.setUserData(this);
 
     polygon.dispose();
     return true;

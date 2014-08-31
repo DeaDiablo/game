@@ -9,12 +9,14 @@ import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.games.CityOfZombies.light.Light2D3D;
+import com.games.CityOfZombies.light.LightFilter;
 import com.games.CityOfZombies.model.Car;
 import com.games.CityOfZombies.model.ModelLayer;
 import com.games.CityOfZombies.model.ModelLevel;
 import com.games.CityOfZombies.model.Player;
 import com.shellGDX.GameInstance;
 import com.shellGDX.GameLog;
+import com.shellGDX.box2dLight.Light;
 import com.shellGDX.box2dLight.LightWorld2D;
 import com.shellGDX.controller.PhysicsWorld2D;
 import com.shellGDX.manager.ResourceManager;
@@ -66,6 +68,7 @@ public class CityScreen extends GameScreen implements InputProcessor
     scene2D = new Scene2D(width, height);
     camera2D = (OrthographicCamera)scene2D.getCamera();
     LightWorld2D.init(camera2D);
+    Light.setContactFilter(new LightFilter());
 
     car = new Car(ResourceManager.instance.getTextureRegion("taxi.png"), -500, 0);
     player = new Player(ResourceManager.instance.getTextureRegion("player_pistol.png"), 0, 0);
