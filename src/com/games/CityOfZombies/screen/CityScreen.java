@@ -14,9 +14,9 @@ import com.games.CityOfZombies.model.ModelLevel;
 import com.games.CityOfZombies.model.Player;
 import com.shellGDX.GameInstance;
 import com.shellGDX.GameLog;
+import com.shellGDX.box2dLight.LightWorld2D;
 import com.shellGDX.box2dLight.PointLight;
-import com.shellGDX.controller.LightWorld;
-import com.shellGDX.controller.PhysicsWorld;
+import com.shellGDX.controller.PhysicsWorld2D;
 import com.shellGDX.manager.ResourceManager;
 import com.shellGDX.model2D.Scene2D;
 import com.shellGDX.model3D.Scene3D;
@@ -55,7 +55,7 @@ public class CityScreen extends GameScreen implements InputProcessor
   public void show()
   {
     //settings
-    PhysicsWorld.init(new Vector2(0, 0), true);
+    PhysicsWorld2D.init(new Vector2(0, 0), true);
     Gdx.input.setCatchBackKey(true);
     Gdx.input.setCatchMenuKey(true);
     setClearColor(1.0f, 1.0f, 1.0f, 1.0f);
@@ -63,9 +63,11 @@ public class CityScreen extends GameScreen implements InputProcessor
     //2d objects
     scene2D = new Scene2D(width, height);
     camera2D = (OrthographicCamera)scene2D.getCamera();
-    LightWorld.init(camera2D);
+    LightWorld2D.init(camera2D);
     
     car = new Car(ResourceManager.instance.getTextureRegion("taxi.png"));
+    car.setPosition(-500, 0);
+    
     player = new Player(ResourceManager.instance.getTextureRegion("player_pistol.png"));
     Level level = ResourceManager.instance.getGleed2DMap("testLevel1.xml");
     scene2D.addActor(level);
@@ -73,7 +75,7 @@ public class CityScreen extends GameScreen implements InputProcessor
     scene2D.addActor(car);
     GameInstance.contoller.addScene2D(scene2D);
     
-    PointLight playerGlow = new PointLight(LightWorld.instance, 128, new Color(0.05f, 0.05f, 0.05f, 0.05f), 1024, 0, 0);
+    PointLight playerGlow = new PointLight(LightWorld2D.instance, 128, new Color(0.05f, 0.05f, 0.05f, 0.05f), 1024, 0, 0);
     playerGlow.setXray(true);
     playerGlow.attachToBody(player.getBody(), 0, 0);
 
@@ -110,7 +112,7 @@ public class CityScreen extends GameScreen implements InputProcessor
     super.update(deltaTime);
 
     speed.set(moveVec);
-    speed.scl(PhysicsWorld.WORLD_TO_BOX * 300);
+    speed.scl(PhysicsWorld2D.WORLD_TO_BOX * 300);
     player.getBody().setLinearVelocity(speed);
     
     camera2D.position.x = player.getOriginX() + player.getX();

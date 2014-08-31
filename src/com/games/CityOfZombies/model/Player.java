@@ -9,54 +9,44 @@ import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.utils.Array;
-import com.shellGDX.controller.PhysicsWorld;
-import com.shellGDX.model2D.CompositeModel;
-import com.shellGDX.model2D.Model2D;
+import com.shellGDX.controller.PhysicsWorld2D;
+import com.shellGDX.model2D.CompositeObject2D;
 
-public class Player extends CompositeModel
+public class Player extends CompositeObject2D
 {
   public Player(TextureRegion textureRegion)
   {
-    init(textureRegion, new Array<String>());
+    super(textureRegion, true, false);
   }
 
   @Override
-  public boolean initPhysics(World world)
+  protected Body initPhysic(World world)
   {
     BodyDef bodyDef = new BodyDef();
     bodyDef.type = BodyType.DynamicBody;
     bodyDef.linearDamping = 20.0f;
     bodyDef.angularDamping = 20.0f;
-    bodyDef.fixedRotation = false;
+    bodyDef.fixedRotation = true;
     bodyDef.position.set(getX(), getY());
-    bodyDef.position.scl(PhysicsWorld.WORLD_TO_BOX);
+    bodyDef.position.scl(PhysicsWorld2D.WORLD_TO_BOX);
     bodyDef.angle = MathUtils.degreesToRadians * getRotation();
 
-    Body newBody = world.createBody(bodyDef);
+    Body body = world.createBody(bodyDef);
 
     CircleShape circle = new CircleShape();
-    circle.setRadius(actor.getWidth() * 0.25f * PhysicsWorld.WORLD_TO_BOX);
+    circle.setRadius(modelObject.getWidth() * 0.25f * PhysicsWorld2D.WORLD_TO_BOX);
 
     FixtureDef fixtureDef = new FixtureDef();
     fixtureDef.shape = circle;
     fixtureDef.density = 1.0f;
     fixtureDef.friction = 1.0f;
-    Fixture fixture = newBody.createFixture(fixtureDef);
+    Fixture fixture = body.createFixture(fixtureDef);
     fixture.setUserData(this);
     circle.dispose();
-    
-    body.setBody(newBody);
 
-    return true;
-  }
-  
-  @Override
-  public boolean initActor(TextureRegion textureRegion)
-  {
-    Model2D model = new Model2D(textureRegion);
-    setActor(model);
-    
-    return true;
+    body.setFixedRotation(true);
+    attachModel(this, 0, 0);
+
+    return body;
   }
 }
