@@ -65,8 +65,8 @@ public class CityScreen extends GameScreen implements InputProcessor
     camera2D = (OrthographicCamera)scene2D.getCamera();
     LightWorld.init(camera2D);
     
-    car = new Car(ResourceManager.instance.getTextureRegion("taxi.png"), -300, 300);
-    player = new Player(ResourceManager.instance.getTextureRegion("player_pistol.png"), 0, 0);
+    car = new Car(ResourceManager.instance.getTextureRegion("taxi.png"));
+    player = new Player(ResourceManager.instance.getTextureRegion("player_pistol.png"));
     Level level = ResourceManager.instance.getGleed2DMap("testLevel1.xml");
     scene2D.addActor(level);
     scene2D.addActor(player);
