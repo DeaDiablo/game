@@ -1,26 +1,16 @@
 package com.games.CityOfZombies.model;
 
 import com.badlogic.gdx.graphics.g3d.Model;
-import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
+import com.games.CityOfZombies.light.ShadowFilter;
 import com.shellGDX.controller.PhysicsWorld2D;
-import com.shellGDX.model3D.Model3D;
 import com.shellGDX.model3D.Scene3D;
 
-public class Wall extends Model3D
+public class Wall extends ModelPlate
 {
-  protected BodyDef         bodyDef       = new BodyDef();
-  protected FixtureDef      fixtureDef    = new FixtureDef();
-  protected Body            body          = null;
-  protected Fixture         fixture       = null;
-  protected boolean         fixedRotation = false;
-
   public Wall(Model model)
   {
     super(model);
@@ -28,16 +18,7 @@ public class Wall extends Model3D
 
   public boolean initPhysicsObject(World world)
   {
-    BodyDef bodyDef = new BodyDef();
-    bodyDef.type = BodyType.StaticBody;
-    bodyDef.linearDamping = 20.0f;
-    bodyDef.angularDamping = 20.0f;
-    bodyDef.fixedRotation = fixedRotation;
-    bodyDef.position.set(getX(), getY());
-    bodyDef.position.scl(PhysicsWorld2D.WORLD_TO_BOX);
-    bodyDef.angle = MathUtils.degreesToRadians * (getRoll() + 90.0f);
-
-    body = world.createBody(bodyDef);
+    super.initPhysicsObject(world);
 
     PolygonShape box = new PolygonShape();
     box.setAsBox(100 * PhysicsWorld2D.WORLD_TO_BOX, 12.5f * PhysicsWorld2D.WORLD_TO_BOX);
@@ -46,8 +27,8 @@ public class Wall extends Model3D
     fixtureDef.shape = box;
     fixtureDef.density = 1.0f;
     fixtureDef.friction = 0.0f;
-    fixture = body.createFixture(fixtureDef);
-    fixture.setUserData(this);
+    Fixture fixture = body.createFixture(fixtureDef);
+    fixture.setFilterData(new ShadowFilter());
 
     box.dispose();
     return true;

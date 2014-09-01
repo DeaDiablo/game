@@ -94,6 +94,6 @@ public class ModelLayer extends Group3D
       }
     }
     
-    return true;
+    return super.update(delta);
   }
 }

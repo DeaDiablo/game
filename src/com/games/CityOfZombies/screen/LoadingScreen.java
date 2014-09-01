@@ -2,6 +2,7 @@ package com.games.CityOfZombies.screen;
 
 import com.shellGDX.GameInstance;
 import com.shellGDX.manager.ResourceManager;
+import com.shellGDX.model3D.light.LightWorld3D;
 import com.shellGDX.screen.GameScreen;
 
 public class LoadingScreen extends GameScreen
@@ -16,6 +17,7 @@ public class LoadingScreen extends GameScreen
   {
     ResourceManager.instance.loadFolder("data");
     ResourceManager.instance.loadGleed2DMap("data/testLevel1.xml");
+    LightWorld3D.instance.init();
   }
 
   @Override
