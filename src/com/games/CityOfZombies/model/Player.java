@@ -44,8 +44,7 @@ public class Player extends CompositeObject2D
     fixture.setUserData(this);
     circle.dispose();
 
-    body.setFixedRotation(true);
-    attachModel(this, 0, 0);
+    attachPhysicBody(0, 0);
 
     return body;
   }

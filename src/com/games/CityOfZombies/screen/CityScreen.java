@@ -45,7 +45,7 @@ public class CityScreen extends GameScreen implements InputProcessor
   protected PerspectiveCamera  camera3D  = null;
   
   protected boolean            clearWeather = true;
-  protected DayNightCycle      dayNight     = new DayNightCycle(22, 0.5f, clearWeather);
+  protected DayNightCycle      dayNight     = new DayNightCycle(22, 0.5f / 48.0f, clearWeather);
   
   public CityScreen(float width, float height)
   {
@@ -247,7 +247,7 @@ public class CityScreen extends GameScreen implements InputProcessor
   {
     mousePoint.set(screenX, Gdx.graphics.getHeight() -  screenY);
     mousePoint.sub(Gdx.graphics.getWidth() * 0.5f, Gdx.graphics.getHeight() * 0.5f);
-    player.getModelObject().setRotation(MathUtils.atan2(mousePoint.y, mousePoint.x) * MathUtils.radiansToDegrees - 90.0f);
+    player.setRotation(MathUtils.atan2(mousePoint.y, mousePoint.x) * MathUtils.radiansToDegrees - 90.0f);
     return true;
   }
 

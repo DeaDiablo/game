@@ -49,6 +49,8 @@ public class Car extends CompositeObject2D
     Fixture fixture = body.createFixture(fixtureDef);
     fixture.setUserData(this);
     polygon.dispose();
+    
+    attachPhysicBody(0, 0);
 
     return body;
   }
