@@ -15,7 +15,7 @@ public class PointLight2D3D extends PointLight implements Light2D3D
   public PointLight2D3D(RayHandler rayHandler, int rays)
   {
     super(rayHandler, rays);
-    light3D = new PointLight3D(new Vector3(getX(), getY(), 100.0f), getDistance() * 0.5f, getColor());
+    light3D = new PointLight3D(new Vector3(getX(), getY(), 50.0f), getDistance() * 0.5f, getColor());
     LightWorld3D.instance.addLight(light3D);
     lights2D3D.add(this);
   }
@@ -23,7 +23,7 @@ public class PointLight2D3D extends PointLight implements Light2D3D
   public PointLight2D3D(RayHandler rayHandler, int rays, Color color, float distance, float x, float y)
   {
     super(rayHandler, rays, color, distance, x, y);
-    light3D = new PointLight3D(new Vector3(x, y, 100.0f), distance * 0.5f, color);
+    light3D = new PointLight3D(new Vector3(x, y, 50.0f), distance * 0.5f, color);
     LightWorld3D.instance.addLight(light3D);
     lights2D3D.add(this);
   }
@@ -39,6 +39,7 @@ public class PointLight2D3D extends PointLight implements Light2D3D
     light3D.active = isActive();
     light3D.position.x = getX();
     light3D.position.y = getY();
+    light3D.radius = getDistance() * 0.5f;
   }
 
   @Override
