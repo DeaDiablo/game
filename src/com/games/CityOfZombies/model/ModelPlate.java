@@ -7,10 +7,10 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.shellGDX.controller.PhysicsWorld2D;
-import com.shellGDX.model3D.Model3D;
+import com.shellGDX.model3D.ModelObject3D;
 import com.shellGDX.model3D.Scene3D;
 
-public abstract class ModelPlate extends Model3D
+public abstract class ModelPlate extends ModelObject3D
 {
   protected Body body = null;
 
