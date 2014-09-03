@@ -20,6 +20,7 @@ import com.shellGDX.box2dLight.Light2D;
 import com.shellGDX.box2dLight.LightWorld2D;
 import com.shellGDX.controller.PhysicsWorld2D;
 import com.shellGDX.manager.ResourceManager;
+import com.shellGDX.model2D.EffectObject2D;
 import com.shellGDX.model2D.Scene2D;
 import com.shellGDX.model3D.Scene3D;
 import com.shellGDX.model3D.light.LightWorld3D;
@@ -39,6 +40,7 @@ public class CityScreen extends GameScreen implements InputProcessor
   protected OrthographicCamera camera2D  = null;
   protected Player             player    = null;
   protected Car                car       = null;
+  protected EffectObject2D     rain      = null;
 
   //3d objects
   protected Scene3D            scene3D   = null;
@@ -61,7 +63,7 @@ public class CityScreen extends GameScreen implements InputProcessor
     PhysicsWorld2D.init(new Vector2(0, 0), true);
     Gdx.input.setCatchBackKey(true);
     Gdx.input.setCatchMenuKey(true);
-    setClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+    setClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
     //2d objects
     scene2D = new Scene2D(width, height);
@@ -102,6 +104,10 @@ public class CityScreen extends GameScreen implements InputProcessor
     GameInstance.contoller.addScene3D(scene3D);
 
     GameInstance.contoller.addProcessor(this);
+    
+    rain = new EffectObject2D(ResourceManager.instance.getEffect("true_rain_test2.p"));
+    rain.setZIndex(1000);
+    scene2D.addActor(rain);
   }
 
   protected Vector2 speed = new Vector2();
@@ -121,6 +127,8 @@ public class CityScreen extends GameScreen implements InputProcessor
     camera3D.position.y = camera2D.position.y;
     camera3D.update();
 
+    rain.setPosition(camera2D.position.x, camera2D.position.y);
+
     dayNight.update(deltaTime, clearWeather);
     super.update(deltaTime);
     
@@ -129,7 +137,6 @@ public class CityScreen extends GameScreen implements InputProcessor
 
     LightWorld3D.instance.update();
     scene3D.setShader(LightWorld3D.instance.getActiveShader());
-
     GameLog.instance.writeFPS();
   }
 
