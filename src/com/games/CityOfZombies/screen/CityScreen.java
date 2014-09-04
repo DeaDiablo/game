@@ -1,12 +1,9 @@
 package com.games.CityOfZombies.screen;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.games.CityOfZombies.light.Light2D3D;
 import com.games.CityOfZombies.light.LightFilter;
@@ -29,7 +26,7 @@ import com.shellGDX.utils.DayNightCycle;
 import com.shellGDX.utils.gleed.Layer;
 import com.shellGDX.utils.gleed.Level;
 
-public class CityScreen extends GameScreen implements InputProcessor
+public class CityScreen extends GameScreen
 {
   //parametrs
   protected float width = 0.0f,
@@ -103,22 +100,19 @@ public class CityScreen extends GameScreen implements InputProcessor
     scene3D.addModel3D(modelLevel);
     GameInstance.contoller.addScene3D(scene3D);
 
-    GameInstance.contoller.addProcessor(this);
+    GameInstance.contoller.addProcessor(player);
     
     rain = new EffectObject2D(ResourceManager.instance.getEffect("true_rain_test2.p"));
     rain.setZIndex(1000);
     scene2D.addActor(rain);
   }
-
-  protected Vector2 speed = new Vector2();
   
   @Override
   public void update(float deltaTime)
   {
-    speed.set(moveVec);
-    speed.scl(PhysicsWorld2D.WORLD_TO_BOX * 300);
-    player.getBody().setLinearVelocity(speed);
-
+    dayNight.update(deltaTime, clearWeather);
+    super.update(deltaTime);
+    
     camera2D.position.x = player.getOriginX() + player.getX();
     camera2D.position.y = player.getOriginY() + player.getY();
     camera2D.update();
@@ -128,9 +122,6 @@ public class CityScreen extends GameScreen implements InputProcessor
     camera3D.update();
 
     rain.setPosition(camera2D.position.x, camera2D.position.y);
-
-    dayNight.update(deltaTime, clearWeather);
-    super.update(deltaTime);
     
     for(Light2D3D light : Light2D3D.lights2D3D)
       light.update(deltaTime);
@@ -156,111 +147,5 @@ public class CityScreen extends GameScreen implements InputProcessor
     view.drawLightWorld();
     scene3D.draw();
     //view.drawPhysicsDebug(scene2D.getCamera());
-  }
-  
-  //control
-  protected Vector2 moveVec    = new Vector2(0, 0);
-  protected Vector2 mousePoint = new Vector2(0, 0);
-
-  @Override
-  public boolean keyDown(int keycode)
-  {
-    switch (keycode)
-    {
-      case Input.Keys.A:
-      case Input.Keys.LEFT:
-        moveVec.x -= 1.0f;
-        break;
-
-      case Input.Keys.D:
-      case Input.Keys.RIGHT:
-        moveVec.x += 1.0f;
-        break;
-
-      case Input.Keys.W:
-      case Input.Keys.UP:
-        moveVec.y += 1.0f;
-        break;
-
-      case Input.Keys.S:
-      case Input.Keys.DOWN:
-        moveVec.y -= 1.0f;
-        break;
-        
-      default:
-        return false;
-    }
-    
-    return true;
-  }
-
-  @Override
-  public boolean keyUp(int keycode)
-  {
-    switch (keycode)
-    {
-      case Input.Keys.A:
-      case Input.Keys.LEFT:
-        moveVec.x += 1.0f;
-        break;
-
-      case Input.Keys.D:
-      case Input.Keys.RIGHT:
-        moveVec.x -= 1.0f;
-        break;
-
-      case Input.Keys.W:
-      case Input.Keys.UP:
-        moveVec.y -= 1.0f;
-        break;
-
-      case Input.Keys.S:
-      case Input.Keys.DOWN:
-        moveVec.y += 1.0f;
-        break;
-        
-      default:
-        return false;
-    }
-    return true;
-  }
-
-  @Override
-  public boolean keyTyped(char character)
-  {
-    return false;
-  }
-
-  @Override
-  public boolean touchDown(int screenX, int screenY, int pointer, int button)
-  {
-    return false;
-  }
-
-  @Override
-  public boolean touchUp(int screenX, int screenY, int pointer, int button)
-  {
-    return false;
-  }
-
-  @Override
-  public boolean touchDragged(int screenX, int screenY, int pointer)
-  {
-    return false;
-  }
-
-  @Override
-  public boolean mouseMoved(int screenX, int screenY)
-  {
-    mousePoint.set(screenX, Gdx.graphics.getHeight() -  screenY);
-    mousePoint.sub(Gdx.graphics.getWidth() * 0.5f, Gdx.graphics.getHeight() * 0.5f);
-    player.setRotation(MathUtils.atan2(mousePoint.y, mousePoint.x) * MathUtils.radiansToDegrees - 90.0f);
-    return true;
-  }
-
-  @Override
-  public boolean scrolled(int amount)
-  {
-    return false;
   }
 }
