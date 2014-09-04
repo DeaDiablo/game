@@ -115,11 +115,9 @@ public class CityScreen extends GameScreen
     
     camera2D.position.x = player.getOriginX() + player.getX();
     camera2D.position.y = player.getOriginY() + player.getY();
-    camera2D.update();
 
     camera3D.position.x = camera2D.position.x;
     camera3D.position.y = camera2D.position.y;
-    camera3D.update();
 
     rain.setPosition(camera2D.position.x, camera2D.position.y);
     
